@@ -15,6 +15,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@react-three/drei": "^9.121.4",
+    "@react-three/fiber": "^8.17.14",
     "@t3-oss/env-nextjs": "^0.12.0",
     "@tanstack/react-query": "^5.61.4",
     "@trpc/client": "^11.0.0-rc.446",
@@ -32,6 +34,8 @@
     "superjson": "^2.2.1",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
+    "three": "^0.173.0",
+    "three-stdlib": "^2.35.13",
     "usehooks-ts": "^3.1.0",
     "zod": "^3.23.3",
     "zustand": "^5.0.2"
@@ -43,6 +47,7 @@
     "@types/node": "^22.10.10",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "@types/three": "^0.173.0",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",
     "postcss-load-config": "^6.0.1",
