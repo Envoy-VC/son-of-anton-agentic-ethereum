@@ -1,4 +1,7 @@
-import { HumanMessage } from '@langchain/core/messages';
+import {
+  HumanMessage,
+  mapChatMessagesToStoredMessages,
+} from '@langchain/core/messages';
 import { z } from 'zod';
 import { initializeAgent } from '~/lib/agentkit';
 import { createTRPCRouter, publicProcedure } from '~/server/api/trpc';
@@ -14,6 +17,10 @@ export const chatRouter = createTRPCRouter({
         },
         config
       );
-      return res;
+      const serialized = mapChatMessagesToStoredMessages(res.messages);
+      return {
+        messages: serialized,
+        structuredResponse: res.structuredResponse,
+      };
     }),
 });
