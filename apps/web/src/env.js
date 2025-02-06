@@ -4,6 +4,10 @@ import { z } from 'zod';
 export const env = createEnv({
   server: {
     NODE_ENV: z.enum(['development', 'test', 'production']),
+    CDP_API_KEY_NAME: z.string(),
+    CDP_API_KEY_PRIVATE_KEY: z.string(),
+    PRIVATE_KEY: z.string(),
+    MISTRAL_API_KEY: z.string(),
   },
   client: {},
   experimental__runtimeEnv: {},
