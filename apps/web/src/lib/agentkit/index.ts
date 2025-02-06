@@ -9,6 +9,7 @@ import { getLangChainTools } from '@coinbase/agentkit-langchain';
 import { MemorySaver } from '@langchain/langgraph';
 import { createReactAgent } from '@langchain/langgraph/prebuilt';
 import { ChatMistralAI } from '@langchain/mistralai';
+import { ChatOllama } from '@langchain/ollama';
 
 import { http, createWalletClient } from 'viem';
 
@@ -17,17 +18,18 @@ import { baseSepolia } from 'viem/chains';
 import { env } from '~/env';
 
 export const initializeAgent = async () => {
-  const llm = new ChatMistralAI({
-    model: 'mistral-large-latest',
-    apiKey: env.MISTRAL_API_KEY,
-  });
-
-  // agent = initialize_agent(
-  //   tools,
-  //   llm,
-  //   (agent = AgentType.OPENAI_FUNCTIONS),
-  //   (verbose = True)
-  // );
+  const isDev = env.NODE_ENV === 'development';
+  let llm: ChatMistralAI | ChatOllama;
+  if (isDev) {
+    llm = new ChatOllama({
+      model: 'llama3.1:latest',
+    });
+  } else {
+    llm = new ChatMistralAI({
+      model: 'mistral-large-latest',
+      apiKey: env.MISTRAL_API_KEY,
+    });
+  }
 
   const account = privateKeyToAccount(env.PRIVATE_KEY as `0x${string}`);
   const walletClient = createWalletClient({
@@ -38,7 +40,6 @@ export const initializeAgent = async () => {
 
   const walletProvider = new ViemWalletProvider(walletClient);
 
-  // Initialize AgentKit
   const agentkit = await AgentKit.from({
     walletProvider,
     actionProviders: [
