@@ -15,6 +15,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@aws-sdk/client-polly": "^3.744.0",
     "@coinbase/agentkit": "^0.1.1",
     "@coinbase/agentkit-langchain": "^0.1.0",
     "@langchain/core": "^0.3.38",
@@ -24,6 +25,8 @@
     "@nillion/client-vms": "0.3.1",
     "@nillion/client-wasm": "0.3.1",
     "@noble/curves": "^1.8.1",
+    "@radix-ui/react-dialog": "^1.1.6",
+    "@radix-ui/react-select": "^2.1.6",
     "@radix-ui/react-slot": "^1.1.2",
     "@react-three/drei": "^9.121.4",
     "@react-three/fiber": "^8.17.14",

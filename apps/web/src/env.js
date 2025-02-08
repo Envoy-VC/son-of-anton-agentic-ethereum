@@ -12,6 +12,8 @@ export const env = createEnv({
     NILLION_BOOTNODE_URL: z.string(),
     NILLION_PK: z.string(),
     NILLION_SEED: z.string(),
+    AWS_ACCESS_KEY: z.string(),
+    AWS_SECRET_KEY: z.string(),
   },
   client: {},
   experimental__runtimeEnv: {},

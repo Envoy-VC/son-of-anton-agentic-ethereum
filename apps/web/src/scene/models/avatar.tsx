@@ -1,9 +1,10 @@
 'use client';
 
-import { useGLTF } from '@react-three/drei';
+import { useAnimations, useGLTF } from '@react-three/drei';
 import type { AvatarModel } from '~/types';
 
 import type { GroupProps } from '@react-three/fiber';
+import { useEffect, useRef } from 'react';
 import {
   headTargets,
   leftEyeTargets,
@@ -11,10 +12,28 @@ import {
   teethTargets,
 } from '~/data/avatar';
 
+import type { Group } from 'three';
+
 export const Avatar = (props: GroupProps) => {
   const { nodes, materials } = useGLTF('/models/avatar.glb') as AvatarModel;
+  const { animations } = useGLTF('/models/animations.glb');
+
+  // biome-ignore lint/style/noNonNullAssertion: safe as we preload
+  const avatarRef = useRef<Group>(null!);
+
+  const { actions, mixer } = useAnimations(animations, avatarRef);
+
+  useEffect(() => {
+    if (actions && avatarRef.current) {
+      console.log(actions);
+      actions.idle?.reset().fadeIn(1).play();
+    }
+
+    return () => actions.idle?.fadeOut(0.5);
+  }, [actions]);
+
   return (
-    <group {...props} dispose={null}>
+    <group {...props} dispose={null} ref={avatarRef}>
       <group name='Scene'>
         <group name='Armature' userData={{ name: 'Armature' }}>
           <primitive object={nodes.Hips} />

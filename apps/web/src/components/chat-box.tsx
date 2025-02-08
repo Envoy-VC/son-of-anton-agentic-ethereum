@@ -1,7 +1,7 @@
 'use client';
 
 import { useMutation } from '@tanstack/react-query';
-import { useState } from 'react';
+import { type ComponentProps, useState } from 'react';
 import { toast } from 'sonner';
 import { useUser } from '~/hooks';
 import { api } from '~/trpc/react';
@@ -9,24 +9,27 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 
 import { Loader2Icon, SendHorizontalIcon } from 'lucide-react';
+import { cn } from '~/lib/utils';
 
-export const ChatBox = () => {
+export const ChatBox = ({ className, ...props }: ComponentProps<'div'>) => {
   const { getUserKey } = useUser();
-  const sendMessage = api.chat.chat.useMutation();
-
   const [message, setMessage] = useState<string>('');
+
+  const chatStream = api.chat.chat.useMutation();
 
   const { isPending, mutateAsync } = useMutation({
     mutationKey: ['chat'],
     mutationFn: async () => {
       const keys = getUserKey();
-      setMessage('');
-      await sendMessage.mutateAsync({
+
+      const res = await chatStream.mutateAsync({
         message,
         privateKeyStoreId: keys.storeId,
         seed: keys.seed,
         address: keys.address,
       });
+
+      console.log(res);
     },
     onError(error) {
       toast.dismiss();
@@ -35,7 +38,13 @@ export const ChatBox = () => {
   });
 
   return (
-    <div className='absolute right-1/2 bottom-12 mx-auto mt-6 flex w-full max-w-md translate-x-1/2 items-center justify-between rounded-[10px] bg-white p-[2px] shadow-sm'>
+    <div
+      className={cn(
+        'flex w-full items-center justify-between rounded-[10px] bg-white p-[4px] shadow-sm',
+        className
+      )}
+      {...props}
+    >
       <Input
         className='rounded-3xl border-none shadow-none'
         placeholder='Write your message here.'
