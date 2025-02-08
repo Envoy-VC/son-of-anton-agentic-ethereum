@@ -37,4 +37,4 @@ yarn-error.log*
 .DS_Store
 *.pem
 
-packages/
+packages/nillion-viem-client/
