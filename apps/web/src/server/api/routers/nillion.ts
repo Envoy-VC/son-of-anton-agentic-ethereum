@@ -14,6 +14,7 @@ const SignableMessageSchema = z.union([
   }),
 ]);
 
+import { privateKeyToAccount } from 'viem/accounts';
 import { env } from '~/env';
 import { createTRPCRouter, publicProcedure } from '~/server/api/trpc';
 
@@ -32,11 +33,13 @@ export const nillionRouter = createTRPCRouter({
 
       const privateKey: Uint8Array = secp256k1.utils.randomPrivateKey();
       const publicKey: Uint8Array = secp256k1.getPublicKey(privateKey);
+      const address = privateKeyToAccount(toHex(privateKey)).address;
       const storeId = await ecdsa.storePrivateKey({ privateKey });
       return {
         storeId,
         publicKey: toHex(publicKey),
         privateKey: toHex(privateKey),
+        address,
       };
     }),
   signMessage: publicProcedure

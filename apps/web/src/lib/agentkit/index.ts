@@ -11,13 +11,21 @@ import { createReactAgent } from '@langchain/langgraph/prebuilt';
 import { ChatMistralAI } from '@langchain/mistralai';
 import { ChatOllama } from '@langchain/ollama';
 
-import { http, createWalletClient } from 'viem';
+import { http, type Hex, createWalletClient } from 'viem';
 
-import { privateKeyToAccount } from 'viem/accounts';
 import { baseSepolia } from 'viem/chains';
 import { env } from '~/env';
 
-export const initializeAgent = async () => {
+import { createSignerFromKey } from '@nillion/client-vms';
+import { nillionAccount } from 'nillion-viem-client';
+
+interface InitializeAgentProps {
+  seed: string;
+  address: Hex;
+  privateKeyStoreId: string;
+}
+
+export const initializeAgent = async (props: InitializeAgentProps) => {
   const isDev = env.NODE_ENV === 'development';
   let llm: ChatMistralAI | ChatOllama;
   if (isDev) {
@@ -31,7 +39,17 @@ export const initializeAgent = async () => {
     });
   }
 
-  const account = privateKeyToAccount(env.PRIVATE_KEY as `0x${string}`);
+  const signer = await createSignerFromKey(env.NILLION_PK);
+
+  const account = nillionAccount({
+    chainUrl: env.NILLION_CHAIN_ID,
+    bootnodeUrl: env.NILLION_BOOTNODE_URL,
+    seed: props.seed,
+    address: props.address,
+    privateKeyStoreId: props.privateKeyStoreId,
+    signer,
+  });
+
   const walletClient = createWalletClient({
     account,
     chain: baseSepolia,

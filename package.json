@@ -4,8 +4,8 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
-    "lint": "turbo lint",
-    "format": "npx ultracite lint",
+    "lint": "pnpm ultracite lint",
+    "format": "pnpm ultracite format",
     "prepare": "husky",
     "commitlint": "commitlint --edit"
   },

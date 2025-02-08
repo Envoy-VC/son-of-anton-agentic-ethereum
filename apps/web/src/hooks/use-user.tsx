@@ -6,6 +6,7 @@ interface NillionKey {
   storeId: string;
   publicKey: Hex;
   seed: string;
+  address: Hex;
 }
 
 export const useUser = () => {

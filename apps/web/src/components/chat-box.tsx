@@ -21,6 +21,12 @@ export const ChatBox = () => {
     mutationFn: async () => {
       const keys = getUserKey();
       setMessage('');
+      await sendMessage.mutateAsync({
+        message,
+        privateKeyStoreId: keys.storeId,
+        seed: keys.seed,
+        address: keys.address,
+      });
     },
     onError(error) {
       toast.dismiss();
