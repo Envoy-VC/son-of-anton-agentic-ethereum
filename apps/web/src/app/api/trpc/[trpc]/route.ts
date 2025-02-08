@@ -9,6 +9,8 @@ import { createTRPCContext } from '~/server/api/trpc';
  * This wraps the `createTRPCContext` helper and provides the required context for the tRPC API when
  * handling a HTTP request (e.g. when you make requests from Client Components).
  */
+
+// biome-ignore lint/suspicious/useAwait: safe
 const createContext = async (req: NextRequest) => {
   return createTRPCContext({
     headers: req.headers,
