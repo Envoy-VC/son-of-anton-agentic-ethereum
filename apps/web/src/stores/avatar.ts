@@ -11,6 +11,7 @@ export interface AvatarStore {
   visemes: LipSyncData | null;
   messages: MessageWithAudio[];
   currentMessage: MessageWithAudio | null;
+  animation: string;
   onMessagePlayed: () => void;
   setMessages: (messages: MessageWithAudio[]) => void;
   setCurrentMessage: (message: MessageWithAudio | null) => void;
@@ -21,11 +22,13 @@ export interface AvatarStore {
   setFacialExpression: (name: string) => void;
   setAudio: (audio: HTMLAudioElement) => void;
   setVisemes: (visemes: LipSyncData | null) => void;
+  setAnimation: (animation: string) => void;
 }
 
 export const useAvatarStore = create<AvatarStore>((set, get) => ({
   visemes: null,
   facialExpression: 'default',
+  animation: 'greet',
   messages: [],
   currentMessage: null,
   setUpMode: false,
@@ -56,4 +59,5 @@ export const useAvatarStore = create<AvatarStore>((set, get) => ({
   },
   setMessages: (messages) => set({ messages }),
   setCurrentMessage: (currentMessage) => set({ currentMessage }),
+  setAnimation: (animation) => set({ animation }),
 }));

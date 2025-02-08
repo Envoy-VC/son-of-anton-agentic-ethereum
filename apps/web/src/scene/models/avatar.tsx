@@ -3,20 +3,27 @@
 import { useAnimations, useGLTF } from '@react-three/drei';
 import type { AvatarModel } from '~/types';
 
-import type { GroupProps } from '@react-three/fiber';
+import { type GroupProps, useFrame } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
 import {
+  facialExpressions,
   headTargets,
   leftEyeTargets,
+  phonesToMorphTargets,
   rightEyeTargets,
   teethTargets,
 } from '~/data/avatar';
 
 import type { Group } from 'three';
 
+import * as THREE from 'three';
+import { useAvatar } from '~/hooks';
+
 export const Avatar = (props: GroupProps) => {
   const { nodes, materials } = useGLTF('/models/avatar.glb') as AvatarModel;
   const { animations } = useGLTF('/models/animations.glb');
+
+  const { store } = useAvatar();
 
   // biome-ignore lint/style/noNonNullAssertion: safe as we preload
   const avatarRef = useRef<Group>(null!);
@@ -24,13 +31,111 @@ export const Avatar = (props: GroupProps) => {
   const { actions, mixer } = useAnimations(animations, avatarRef);
 
   useEffect(() => {
-    if (actions && avatarRef.current) {
-      console.log(actions);
-      actions.idle?.reset().fadeIn(1).play();
+    if (!actions || !avatarRef.current) {
+      return;
     }
 
-    return () => actions.idle?.fadeOut(0.5);
-  }, [actions]);
+    mixer.stopAllAction();
+    const currentAction = actions[store.animation];
+
+    if (currentAction) {
+      currentAction.reset().fadeIn(1).play();
+    }
+
+    return () => {
+      currentAction?.fadeOut(0.5);
+    };
+  }, [store.animation, actions, mixer]);
+
+  const lerpMorphTarget = (target: string, value: number, speed = 0.1) => {
+    for (const child of Object.values(nodes)) {
+      if (
+        child instanceof THREE.SkinnedMesh &&
+        child.morphTargetDictionary &&
+        child.morphTargetInfluences
+      ) {
+        const index = child.morphTargetDictionary[target];
+        if (
+          index === undefined ||
+          child.morphTargetInfluences[index] === undefined
+        ) {
+          return;
+        }
+        child.morphTargetInfluences[index] = THREE.MathUtils.lerp(
+          child.morphTargetInfluences[index],
+          value,
+          speed
+        );
+      }
+    }
+  };
+
+  useFrame(() => {
+    if (store.currentMessage && store.audio && store.visemes) {
+      const currentAudioTime = store.audio.currentTime;
+      for (const mouthCue of store.visemes) {
+        if (
+          currentAudioTime >= mouthCue.start &&
+          currentAudioTime <= mouthCue.end
+        ) {
+          store.addMorphTarget(mouthCue.value);
+          lerpMorphTarget(mouthCue.value, 1, 0.2);
+          break;
+        }
+        store.removeMorphTarget(mouthCue.value);
+      }
+    }
+
+    for (const value of Object.values(phonesToMorphTargets)) {
+      if (store.activeMorphTargets.has(value)) {
+        return;
+      }
+      lerpMorphTarget(value, 0, 0.1);
+    }
+  });
+
+  useFrame(() => {
+    for (const key of Object.keys(
+      nodes.EyeLeft.morphTargetDictionary as object
+    )) {
+      const mapping = facialExpressions[store.facialExpression];
+      if (mapping?.[key]) {
+        lerpMorphTarget(key, mapping[key], 0.1);
+      } else {
+        lerpMorphTarget(key, 0, 0.1);
+      }
+    }
+
+    lerpMorphTarget(
+      'eyeBlinkLeft',
+      store.blinkNow || store.winkNow === 'left' ? 1 : 0,
+      0.5
+    );
+    lerpMorphTarget(
+      'eyeBlinkRight',
+      store.blinkNow || store.winkNow === 'right' ? 1 : 0,
+      0.5
+    );
+  });
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    let blinkTimeout: NodeJS.Timeout;
+    const nextBlink = () => {
+      blinkTimeout = setTimeout(
+        () => {
+          store.blink(true);
+          setTimeout(() => {
+            store.blink(false);
+            nextBlink();
+          }, 300);
+        },
+        THREE.MathUtils.randInt(2000, 5000)
+      );
+    };
+    nextBlink();
+    return () => clearTimeout(blinkTimeout);
+  }, []);
 
   return (
     <group {...props} dispose={null} ref={avatarRef}>
@@ -127,3 +232,4 @@ export const Avatar = (props: GroupProps) => {
 };
 
 useGLTF.preload('/models/avatar.glb');
+useGLTF.preload('/models/animations.glb');

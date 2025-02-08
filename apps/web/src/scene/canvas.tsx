@@ -8,11 +8,7 @@ import { Avatar } from './models';
 
 export default function Canvas() {
   return (
-    <ThreeCanvas
-      shadows
-      camera={{ position: [0, 0, 4], fov: 40 }}
-      frameloop='demand'
-    >
+    <ThreeCanvas shadows camera={{ position: [0, 0, 4], fov: 40 }}>
       <ambientLight intensity={0.7} />
       <spotLight
         intensity={0.5}

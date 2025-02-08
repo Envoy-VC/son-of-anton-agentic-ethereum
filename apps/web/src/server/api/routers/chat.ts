@@ -6,7 +6,7 @@ import { JsonOutputParser } from '@langchain/core/output_parsers';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
 import type { Hex } from 'viem';
 import { z } from 'zod';
-import { initializeAgent } from '~/lib/agentkit';
+import { generateVoiceMessage, initializeAgent } from '~/lib/ai';
 import { createTRPCRouter, publicProcedure } from '~/server/api/trpc';
 
 export const chatRouter = createTRPCRouter({
@@ -42,5 +42,17 @@ export const chatRouter = createTRPCRouter({
         messages: mapChatMessagesToStoredMessages(res.messages),
         structuredResponse: res.structuredResponse,
       };
+    }),
+
+  voiceChat: publicProcedure
+    .input(
+      z.object({
+        message: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const { message } = input;
+      const res = await generateVoiceMessage(message);
+      return res;
     }),
 });

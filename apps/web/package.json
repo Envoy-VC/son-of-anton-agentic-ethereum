@@ -15,6 +15,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@ai-sdk/mistral": "^1.1.7",
     "@aws-sdk/client-polly": "^3.744.0",
     "@coinbase/agentkit": "^0.1.1",
     "@coinbase/agentkit-langchain": "^0.1.0",
@@ -37,6 +38,7 @@
     "@trpc/client": "^11.0.0-rc.446",
     "@trpc/react-query": "^11.0.0-rc.446",
     "@trpc/server": "^11.0.0-rc.446",
+    "ai": "^4.1.26",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dexie": "^4.0.11",
@@ -46,6 +48,7 @@
     "next": "^14",
     "next-themes": "^0.4.4",
     "nillion-viem-client": "workspace:*",
+    "ollama-ai-provider": "^1.2.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "server-only": "^0.0.1",

@@ -1,5 +1,42 @@
+import { useEffect } from 'react';
+import { useAvatarStore } from '~/stores';
+
 export const useAvatar = () => {
-  return <div>useAvatar</div>;
+  const store = useAvatarStore();
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: safe as we only use store
+  useEffect(() => {
+    if (store.messages[0]) {
+      store.setCurrentMessage(store.messages[0]);
+    } else {
+      store.setCurrentMessage(null);
+    }
+  }, [store.messages]);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: safe as we only use store
+  useEffect(() => {
+    const startSequence = () => {
+      if (!store.currentMessage) {
+        return;
+      }
+      const a = new Audio(store.currentMessage.audio);
+      store.setFacialExpression(store.currentMessage.facialExpression);
+      store.setVisemes(store.currentMessage.visemes);
+      store.setAnimation(store.currentMessage.animation);
+      a.play();
+      store.setAudio(a);
+      a.onended = () => {
+        store.onMessagePlayed();
+        store.setFacialExpression('default');
+        store.setVisemes(null);
+        store.setAnimation('standing-animation');
+      };
+    };
+
+    startSequence();
+  }, [store.currentMessage]);
+
+  return { store };
 };
 
 export default useAvatar;

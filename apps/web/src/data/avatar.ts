@@ -283,6 +283,18 @@ export type RightEyeTarget = (typeof rightEyeTargets)[number];
 export type HeadTarget = (typeof headTargets)[number];
 export type TeethTarget = (typeof teethTargets)[number];
 
+export const animations = [
+  'standing-animation',
+  'brooklyn-uprock',
+  'explaining',
+  'greet',
+  'hip-hop-dance-2',
+  'idle',
+  'nervous',
+  'salute',
+  'standing',
+];
+
 export const pollyVisemesToMorphTargets = {
   // Consonants
   p: 'viseme_PP', // b, m, p

@@ -13,11 +13,10 @@ import { ChatOllama } from '@langchain/ollama';
 
 import { http, type Hex, createWalletClient } from 'viem';
 
-import { baseSepolia } from 'viem/chains';
-import { env } from '~/env';
-
 import { createSignerFromKey } from '@nillion/client-vms';
 import { nillionAccount } from 'nillion-viem-client';
+import { baseSepolia } from 'viem/chains';
+import { env } from '~/env';
 
 interface InitializeAgentProps {
   seed: string;
@@ -25,20 +24,27 @@ interface InitializeAgentProps {
   privateKeyStoreId: string;
 }
 
-export const initializeAgent = async (props: InitializeAgentProps) => {
+export const getModel = () => {
   const isDev = env.NODE_ENV === 'development';
   let llm: ChatMistralAI | ChatOllama;
   if (isDev) {
     llm = new ChatOllama({
       model: 'llama3.1:latest',
+      temperature: 0,
     });
   } else {
     llm = new ChatMistralAI({
       model: 'mistral-large-latest',
       apiKey: env.MISTRAL_API_KEY,
+      temperature: 0,
     });
   }
 
+  return llm;
+};
+
+export const initializeAgent = async (props: InitializeAgentProps) => {
+  const llm = getModel();
   const signer = await createSignerFromKey(env.NILLION_PK);
 
   const account = nillionAccount({
@@ -95,3 +101,5 @@ export const initializeAgent = async (props: InitializeAgentProps) => {
 
   return { agent, config: agentConfig };
 };
+
+export * from './voice';

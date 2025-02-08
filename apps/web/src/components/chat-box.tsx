@@ -10,24 +10,29 @@ import { Input } from './ui/input';
 
 import { Loader2Icon, SendHorizontalIcon } from 'lucide-react';
 import { cn } from '~/lib/utils';
+import { useAvatarStore } from '~/stores';
 
 export const ChatBox = ({ className, ...props }: ComponentProps<'div'>) => {
   const { getUserKey } = useUser();
+  const store = useAvatarStore();
   const [message, setMessage] = useState<string>('');
 
   const chatStream = api.chat.chat.useMutation();
+  const generateVoiceMessage = api.chat.voiceChat.useMutation();
 
   const { isPending, mutateAsync } = useMutation({
     mutationKey: ['chat'],
     mutationFn: async () => {
       const keys = getUserKey();
-
-      const res = await chatStream.mutateAsync({
-        message,
-        privateKeyStoreId: keys.storeId,
-        seed: keys.seed,
-        address: keys.address,
-      });
+      const res = await generateVoiceMessage.mutateAsync({ message });
+      const newMessages = [...store.messages, ...res];
+      store.setMessages(newMessages);
+      // const res = await chatStream.mutateAsync({
+      //   message,
+      //   privateKeyStoreId: keys.storeId,
+      //   seed: keys.seed,
+      //   address: keys.address,
+      // });
 
       console.log(res);
     },
