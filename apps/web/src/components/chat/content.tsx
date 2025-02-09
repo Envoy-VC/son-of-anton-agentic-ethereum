@@ -1,7 +1,12 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useChat } from '~/hooks';
+import { cn } from '~/lib/utils';
+import MDXRenderer from './mdx-renderer';
 
 export const ChatContent = () => {
-  const [showScrollButton, setShowScrollButton] = useState(false);
+  const { messages } = useChat();
+
+  const [_showScrollButton, setShowScrollButton] = useState(false);
   const chatRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -21,13 +26,32 @@ export const ChatContent = () => {
     setShowScrollButton(!isAtBottom);
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
   return (
     <div
-      className='h-full flex-1 overflow-y-auto border'
+      className='hide-scrollbar flex h-full flex-1 flex-col gap-2 overflow-y-auto'
       onScroll={handleScroll}
       ref={chatRef}
     >
-      ChatContent
+      {messages.map((msg) => (
+        <div
+          key={msg.id}
+          className={`flex ${msg.type === 'human' ? 'justify-end' : 'justify-start'}`}
+        >
+          <div
+            className={cn(
+              'max-w-md whitespace-pre-line rounded-3xl p-3 text-white',
+              msg.type === 'human' ? 'bg-blue-500' : '!text-black bg-[#EFF1F5]'
+            )}
+          >
+            <MDXRenderer content={msg.data.content} />
+          </div>
+        </div>
+      ))}
     </div>
   );
 };

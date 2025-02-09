@@ -4,7 +4,7 @@ import { useLocalStorage } from 'usehooks-ts';
 
 import { db } from '~/db';
 
-const useChat = () => {
+export const useChat = () => {
   const [activeChatId, setActiveChatId] = useLocalStorage<string | null>(
     'activeChatId',
     null
@@ -18,7 +18,9 @@ const useChat = () => {
       .where('conversationId')
       .equals(activeChatId)
       .toArray();
-    return messages;
+    return messages
+      .filter((message) => message.data.content.length !== 0)
+      .reverse();
   }, [activeChatId]);
 
   const chats = useLiveQuery(async () => {
@@ -57,7 +59,6 @@ const useChat = () => {
 
     await db.messages.bulkAdd(
       messages.map((message) => ({
-        id: crypto.randomUUID(),
         conversationId: chatId,
         type: message.type,
         data: message.data,
@@ -75,5 +76,3 @@ const useChat = () => {
     addMessages,
   };
 };
-
-export default useChat;

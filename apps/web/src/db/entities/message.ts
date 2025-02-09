@@ -7,7 +7,7 @@ import {
 } from '@langchain/core/messages';
 
 export class Message extends Entity<DB> {
-  id!: string;
+  id!: number;
   conversationId!: string;
   type!: string;
   data!: StoredMessage['data'];

@@ -8,7 +8,7 @@ export default class DB extends Dexie {
   constructor() {
     super('ChatsDB');
     this.version(1).stores({
-      messages: 'id, conversationId, type',
+      messages: '++id, conversationId, type',
       conversations: 'id',
     });
     this.messages.mapToClass(Message);

@@ -3,7 +3,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { type ComponentProps, useState } from 'react';
 import { toast } from 'sonner';
-import { useUser } from '~/hooks';
+import { useChat, useUser } from '~/hooks';
 import { api } from '~/trpc/react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -16,6 +16,7 @@ export const ChatBox = ({ className, ...props }: ComponentProps<'div'>) => {
   const { getUserKey } = useUser();
   const store = useAvatarStore();
   const [message, setMessage] = useState<string>('');
+  const { addMessages } = useChat();
 
   const chatStream = api.chat.chat.useMutation();
   const generateVoiceMessage = api.chat.voiceChat.useMutation();
@@ -33,8 +34,7 @@ export const ChatBox = ({ className, ...props }: ComponentProps<'div'>) => {
         seed: keys.seed,
         address: keys.address,
       });
-
-      console.log(res);
+      await addMessages(res.messages);
     },
     onError(error) {
       toast.dismiss();
