@@ -3,18 +3,17 @@
 import { useMutation } from '@tanstack/react-query';
 import { type ComponentProps, useState } from 'react';
 import { toast } from 'sonner';
-import { useChat, useUser } from '~/hooks';
+import { useAvatar, useChat, useUser } from '~/hooks';
 import { api } from '~/trpc/react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 
 import { Loader2Icon, SendHorizontalIcon } from 'lucide-react';
 import { cn } from '~/lib/utils';
-import { useAvatarStore } from '~/stores';
 
 export const ChatBox = ({ className, ...props }: ComponentProps<'div'>) => {
   const { getUserKey } = useUser();
-  const store = useAvatarStore();
+  const { startSequence } = useAvatar();
   const [message, setMessage] = useState<string>('');
   const { addMessages } = useChat();
 
@@ -26,15 +25,16 @@ export const ChatBox = ({ className, ...props }: ComponentProps<'div'>) => {
     mutationFn: async () => {
       const keys = getUserKey();
       const voiceRes = await generateVoiceMessage.mutateAsync({ message });
-      const newMessages = [...store.messages, ...voiceRes];
-      store.setMessages(newMessages);
+      for await (const voice of voiceRes) {
+        await startSequence(voice);
+      }
       const res = await chatStream.mutateAsync({
         message,
         privateKeyStoreId: keys.storeId,
         seed: keys.seed,
         address: keys.address,
       });
-      await addMessages(res.messages);
+      await addMessages(res);
     },
     onError(error) {
       toast.dismiss();

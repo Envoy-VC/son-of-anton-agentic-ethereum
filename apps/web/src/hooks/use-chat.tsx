@@ -1,4 +1,4 @@
-import type { StoredMessage } from '@langchain/core/messages';
+import type { CoreAssistantMessage, CoreToolMessage } from 'ai';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useLocalStorage } from 'usehooks-ts';
 
@@ -18,9 +18,7 @@ export const useChat = () => {
       .where('conversationId')
       .equals(activeChatId)
       .toArray();
-    return messages
-      .filter((message) => message.data.content.length !== 0)
-      .reverse();
+    return messages;
   }, [activeChatId]);
 
   const chats = useLiveQuery(async () => {
@@ -40,18 +38,9 @@ export const useChat = () => {
     setActiveChatId(null);
   };
 
-  const getChatMessages = async () => {
-    if (!activeChatId) {
-      return [];
-    }
-    const messages = await db.messages
-      .where('conversationId')
-      .equals(activeChatId)
-      .toArray();
-    return messages;
-  };
-
-  const addMessages = async (messages: StoredMessage[]) => {
+  const addMessages = async (
+    messages: (CoreAssistantMessage | CoreToolMessage)[]
+  ) => {
     let chatId = activeChatId;
     if (!chatId) {
       chatId = await createNewChat();
@@ -60,8 +49,8 @@ export const useChat = () => {
     await db.messages.bulkAdd(
       messages.map((message) => ({
         conversationId: chatId,
-        type: message.type,
-        data: message.data,
+        type: message.role,
+        data: message,
       }))
     );
   };

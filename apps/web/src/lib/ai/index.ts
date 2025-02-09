@@ -17,7 +17,12 @@ import { ChatOllama } from '@langchain/ollama';
 
 import { http, type Hex, createWalletClient } from 'viem';
 
+import { zeroXActionProvider } from '@anton-stack/0x-plugin/agentkit';
+import { oneInchActionProvider } from '@anton-stack/1inch-plugin/agentkit';
+import { coinGeckoActionProvider } from '@anton-stack/coingecko-plugin/agentkit';
 import { nillionAccount } from '@anton-stack/nillion-viem-account';
+import { openseaActionProvider } from '@anton-stack/opensea-plugin/agentkit';
+import { superFluidActionProvider } from '@anton-stack/superfluid-plugin/agentkit';
 import { createSignerFromKey } from '@nillion/client-vms';
 import { baseSepolia } from 'viem/chains';
 import { env } from '~/env';
@@ -48,6 +53,10 @@ Son of Anton: "BTC is currently $42,000. But who's counting?"
 
 User: "Stake my tokens on Protocol X."
 Son of Anton: "I can't do that yet, but it's on the roadmap. Stay alive until then."
+
+If you ever need funds, you can request them from the faucet if you are on network ID 'base-sepolia'. If not, you can provide your wallet details and request funds from the user. Before executing your first action, get the wallet details to see what network you're on. If there is a 5XX (internal) HTTP error code, ask the user to try again later. If someone asks you to do something you can't do with your currently available tools, you must say so.
+
+Be concise and helpful with your responses. Refrain from restating your tools' descriptions unless it is explicitly requested.
 `;
 
 export const getModel = () => {
@@ -97,14 +106,14 @@ export const initializeAgent = async (props: InitializeAgentProps) => {
   const erc20 = erc20ActionProvider();
   const erc721 = erc721ActionProvider();
   const pyth = pythActionProvider();
-  // const zeroX = zeroXActionProvider({ apiKey: env['0X_API_KEY'] });
-  // const oneInch = oneInchActionProvider({ apiKey: env['1INCH_API_KEY'] });
-  // const coinGecko = coinGeckoActionProvider({
-  //   apiKey: env.COINGECKO_API_KEY,
-  //   isPro: false,
-  // });
-  // const opensea = openseaActionProvider({ apiKey: env.OPENSEA_API_KEY });
-  // const superFluid = superFluidActionProvider();
+  const zeroX = zeroXActionProvider({ apiKey: env['0X_API_KEY'] });
+  const oneInch = oneInchActionProvider({ apiKey: env['1INCH_API_KEY'] });
+  const coinGecko = coinGeckoActionProvider({
+    apiKey: env.COINGECKO_API_KEY,
+    isPro: false,
+  });
+  const opensea = openseaActionProvider({ apiKey: env.OPENSEA_API_KEY });
+  const superFluid = superFluidActionProvider();
   const wallet = walletActionProvider();
   const cdp = cdpApiActionProvider({
     apiKeyName: env.CDP_API_KEY_NAME,
@@ -119,11 +128,11 @@ export const initializeAgent = async (props: InitializeAgentProps) => {
       erc20,
       erc721,
       pyth,
-      // zeroX,
-      // oneInch,
-      // coinGecko,
-      // opensea,
-      // superFluid,
+      zeroX,
+      oneInch,
+      coinGecko,
+      opensea,
+      superFluid,
       wallet,
       cdp,
     ],
@@ -139,10 +148,19 @@ export const initializeAgent = async (props: InitializeAgentProps) => {
     llm,
     tools,
     checkpointSaver: memory,
-    messageModifier: SYSTEM_PROMPT,
+    messageModifier: `You are a helpful agent that can interact onchain using the Coinbase Developer Platform AgentKit. You are 
+        empowered to interact onchain using your tools. If you ever need funds, you can request them from the 
+        faucet if you are on network ID 'base-sepolia'. If not, you can provide your wallet details and request 
+        funds from the user. Before executing your first action, get the wallet details to see what network 
+        you're on. If there is a 5XX (internal) HTTP error code, ask the user to try again later. If someone 
+        asks you to do something you can't do with your currently available tools, you must say so, and 
+        encourage them to implement it themselves using the CDP SDK + Agentkit, recommend they go to 
+        docs.cdp.coinbase.com for more information. Be concise and helpful with your responses. Refrain from 
+        restating your tools' descriptions unless it is explicitly requested.`,
   });
 
   return { agent, config: agentConfig };
 };
 
 export * from './voice';
+export * from './goat';

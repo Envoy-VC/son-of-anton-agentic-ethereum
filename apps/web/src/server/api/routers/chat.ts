@@ -1,12 +1,7 @@
-import {
-  HumanMessage,
-  mapChatMessagesToStoredMessages,
-} from '@langchain/core/messages';
-import { JsonOutputParser } from '@langchain/core/output_parsers';
-import { ChatPromptTemplate } from '@langchain/core/prompts';
+import {} from '@langchain/core/messages';
 import type { Hex } from 'viem';
 import { z } from 'zod';
-import { generateVoiceMessage, initializeAgent } from '~/lib/ai';
+import { generateVoiceMessage, getGoatResponse } from '~/lib/ai';
 import { createTRPCRouter, publicProcedure } from '~/server/api/trpc';
 
 export const chatRouter = createTRPCRouter({
@@ -21,27 +16,16 @@ export const chatRouter = createTRPCRouter({
     )
     .mutation(async ({ input }) => {
       const { message, seed, privateKeyStoreId, address } = input;
-      const { agent, config } = await initializeAgent({
-        seed,
-        privateKeyStoreId,
-        address: address as Hex,
-      });
-      const template = `Return a JSON object with a single key named "answer" that answers the following array of messages: {messages}. Do not wrap the JSON output in markdown blocks.`;
-      const prompt = ChatPromptTemplate.fromTemplate(template);
-      const jsonParser = new JsonOutputParser();
-      const chain = prompt.pipe(agent).pipe(jsonParser);
-
-      const res = await agent.invoke(
+      const res = await getGoatResponse(
         {
-          messages: [new HumanMessage(message)],
+          seed,
+          privateKeyStoreId,
+          address: address as Hex,
         },
-        config
+        message
       );
 
-      return {
-        messages: mapChatMessagesToStoredMessages(res.messages),
-        structuredResponse: res.structuredResponse,
-      };
+      return res;
     }),
 
   voiceChat: publicProcedure

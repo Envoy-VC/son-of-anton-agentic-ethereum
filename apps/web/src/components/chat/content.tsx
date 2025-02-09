@@ -40,15 +40,15 @@ export const ChatContent = () => {
       {messages.map((msg) => (
         <div
           key={msg.id}
-          className={`flex ${msg.type === 'human' ? 'justify-end' : 'justify-start'}`}
+          className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}
         >
           <div
             className={cn(
               'max-w-md whitespace-pre-line rounded-3xl p-3 text-white',
-              msg.type === 'human' ? 'bg-blue-500' : '!text-black bg-[#EFF1F5]'
+              msg.type === 'user' ? 'bg-blue-500' : '!text-black bg-[#EFF1F5]'
             )}
           >
-            <MDXRenderer content={msg.data.content} />
+            <MDXRenderer content={String(msg.text())} />
           </div>
         </div>
       ))}
