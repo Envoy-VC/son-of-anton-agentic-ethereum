@@ -10,7 +10,6 @@ import { createSignerFromKey } from '@nillion/client-vms';
 import { http, type Hex, createWalletClient } from 'viem';
 import { baseSepolia } from 'viem/chains';
 
-import { walletHelpersPlugin } from '@anton-stack/wallet-helpers-plugin/goat';
 import { generateText } from 'ai';
 
 const mistral = createMistral({
@@ -73,8 +72,6 @@ export const getGoatResponse = async (
   const toolsAvailable = Object.keys(tools).map((tool) => ({
     name: tool,
   }));
-
-  console.log(toolsAvailable);
 
   const result = await generateText({
     model,

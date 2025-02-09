@@ -1,16 +1,20 @@
 import { Entity } from 'dexie';
 import type DB from '..';
 
-import type { CoreAssistantMessage, CoreToolMessage } from 'ai';
+import type {
+  CoreAssistantMessage,
+  CoreToolMessage,
+  CoreUserMessage,
+} from 'ai';
 
 export class Message extends Entity<DB> {
   id!: number;
   conversationId!: string;
   type!: string;
-  data!: CoreAssistantMessage | CoreToolMessage;
+  data!: CoreAssistantMessage | CoreToolMessage | CoreUserMessage;
 
   text() {
-    if (this.type === 'assistant') {
+    if (this.data.role === 'assistant') {
       if (Array.isArray(this.data.content)) {
         if (this.data.content[0] && this.data.content[0].type === 'text') {
           return this.data.content[0].text;
@@ -19,6 +23,9 @@ export class Message extends Entity<DB> {
       }
       return this.data.content;
     }
-    return '';
+    if (this.data.role === 'tool') {
+      return '';
+    }
+    return String(this.data.content);
   }
 }

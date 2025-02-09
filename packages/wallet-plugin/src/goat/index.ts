@@ -1,38 +1,29 @@
-import {
-  type Chain,
-  PluginBase,
-  Tool,
-  type WalletClientBase,
-} from '@goat-sdk/core';
+import { type Chain, PluginBase, Tool } from '@goat-sdk/core';
+import type { ViemEVMWalletClient } from '@goat-sdk/wallet-viem';
+import { parseEther } from 'viem';
 // biome-ignore lint/style/useImportType: <explanation>
-import { GetWalletAddressParameters, SignMessageParameters } from '~/common';
+import { SendEthereumParameters } from '~/common';
 
 class WalletHelpersService {
   @Tool({
-    description: 'Sign a message',
-    name: 'signMessage',
+    description: 'Send Ethereum to a address',
+    name: 'sendEth',
   })
-  async signMessage(
-    walletClient: WalletClientBase,
-    parameters: SignMessageParameters
+  async sendEth(
+    walletClient: ViemEVMWalletClient,
+    parameters: SendEthereumParameters
   ) {
-    const signed = await walletClient.signMessage(parameters.message);
-    return signed.signature;
-  }
+    const parsed = parseEther(parameters.amount.toString());
+    const res = await walletClient.sendTransaction({
+      to: parameters.to,
+      value: parsed,
+    });
 
-  @Tool({
-    description: 'Get Wallet Address',
-    name: 'getWalletAddress',
-  })
-  getWalletAddress(
-    walletClient: WalletClientBase,
-    _parameters: GetWalletAddressParameters
-  ) {
-    return walletClient.getAddress();
+    return res.hash;
   }
 }
 
-export class WalletHelpersPlugin extends PluginBase<WalletClientBase> {
+export class WalletHelpersPlugin extends PluginBase<ViemEVMWalletClient> {
   constructor() {
     super('WalletPlugin', [new WalletHelpersService()]);
   }

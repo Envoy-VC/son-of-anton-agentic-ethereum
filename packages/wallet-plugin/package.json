@@ -39,6 +39,8 @@
   },
   "dependencies": {
     "@goat-sdk/core": "^0.4.7",
+    "@goat-sdk/wallet-viem": "^0.2.8",
+    "viem": "^2.22.22",
     "zod": "^3.24.1"
   }
 }

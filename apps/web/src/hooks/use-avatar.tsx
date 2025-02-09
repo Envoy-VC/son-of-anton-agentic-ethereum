@@ -20,13 +20,11 @@ export const useAvatar = () => {
         return;
       }
       const a = new Audio(store.currentMessage.audio);
-      store.setFacialExpression(store.currentMessage.facialExpression);
       store.setVisemes(store.currentMessage.visemes);
       a.play();
       store.setAudio(a);
       a.onended = () => {
         store.onMessagePlayed();
-        store.setFacialExpression('default');
         store.setVisemes(null);
       };
     };

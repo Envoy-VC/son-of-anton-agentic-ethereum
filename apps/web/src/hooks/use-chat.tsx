@@ -1,4 +1,8 @@
-import type { CoreAssistantMessage, CoreToolMessage } from 'ai';
+import type {
+  CoreAssistantMessage,
+  CoreToolMessage,
+  CoreUserMessage,
+} from 'ai';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useLocalStorage } from 'usehooks-ts';
 
@@ -18,7 +22,7 @@ export const useChat = () => {
       .where('conversationId')
       .equals(activeChatId)
       .toArray();
-    return messages;
+    return messages.filter((m) => m.text().length > 0);
   }, [activeChatId]);
 
   const chats = useLiveQuery(async () => {
@@ -39,7 +43,7 @@ export const useChat = () => {
   };
 
   const addMessages = async (
-    messages: (CoreAssistantMessage | CoreToolMessage)[]
+    messages: (CoreAssistantMessage | CoreToolMessage | CoreUserMessage)[]
   ) => {
     let chatId = activeChatId;
     if (!chatId) {

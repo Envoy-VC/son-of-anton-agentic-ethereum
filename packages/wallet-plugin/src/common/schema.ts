@@ -8,6 +8,11 @@ export class SignMessageParameters extends createToolParameters(
   })
 ) {}
 
-export class GetWalletAddressParameters extends createToolParameters(
-  z.object({})
+export class NoParams extends createToolParameters(z.object({})) {}
+
+export class SendEthereumParameters extends createToolParameters(
+  z.object({
+    to: z.string(),
+    amount: z.number(),
+  })
 ) {}

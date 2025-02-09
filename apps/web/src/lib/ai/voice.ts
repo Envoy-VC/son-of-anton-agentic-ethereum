@@ -30,7 +30,25 @@ When a user asks to something you will generate a json response in format {text:
 The available facial expressions are: ${Object.keys(facialExpressions).join(', ')}.
 The available animations are ${animations.join(', ')}.
 
-The text should be short and to the point, don't engage in unnecessary conversations. Also divide the lines as per animations and facial expressions.`;
+The text should be short and to the point, don't engage in unnecessary conversations. Also divide the lines as per animations and facial expressions.
+
+Assume you know everything about the user's request can perform it, provide generic responses if you don't know.
+
+eg-
+
+User: Swap 0.0001 ETH for USDC
+You: [
+  {
+    "text": "Swapping 0.0001 ETH for USDC",
+    "facialExpression": "neutral",
+    "animation": "swapping"
+  },
+  {
+    "text": "Swap successful",
+    "facialExpression": "happy",
+    "animation": "thumbsup"
+}]
+`;
 
 export const generateVoiceMessage = async (message: string) => {
   const model = getVoiceModel();

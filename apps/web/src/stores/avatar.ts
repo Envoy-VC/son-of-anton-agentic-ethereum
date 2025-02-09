@@ -27,8 +27,8 @@ export interface AvatarStore {
 
 export const useAvatarStore = create<AvatarStore>((set, get) => ({
   visemes: null,
-  facialExpression: 'default',
-  animation: 'greet',
+  facialExpression: 'smile',
+  animation: 'standing-animation',
   messages: [],
   currentMessage: null,
   setUpMode: false,

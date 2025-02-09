@@ -24,6 +24,7 @@ export const ChatBox = ({ className, ...props }: ComponentProps<'div'>) => {
     mutationKey: ['chat'],
     mutationFn: async () => {
       const keys = getUserKey();
+      await addMessages([{ role: 'user', content: message }]);
       const voiceRes = await generateVoiceMessage.mutateAsync({ message });
       const messages = [...store.messages, ...voiceRes];
       store.setMessages(messages);

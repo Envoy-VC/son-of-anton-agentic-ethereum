@@ -90,11 +90,6 @@ async function synthesizeSpeechWithPolly(text: string) {
         mouthCue.value as keyof typeof pollyVisemesToMorphTargets
       ],
   }));
-  console.log({
-    text,
-    audio,
-    lipSyncData,
-  });
   return {
     audio,
     visemes: lipSyncData as LipSyncData,
