@@ -6,7 +6,6 @@
     "dev": "turbo dev",
     "lint": "pnpm ultracite lint",
     "format": "pnpm ultracite format",
-    "prepare": "husky",
     "commitlint": "commitlint --edit"
   },
   "devDependencies": {
@@ -14,6 +13,7 @@
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
     "husky": "^9.1.6",
+    "lefthook": "^1.10.10",
     "lint-staged": "^15.2.10",
     "turbo": "^2.3.1",
     "typescript": "^5.7.3",
