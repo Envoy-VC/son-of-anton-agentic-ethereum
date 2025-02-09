@@ -24,15 +24,15 @@ export const ChatBox = ({ className, ...props }: ComponentProps<'div'>) => {
     mutationKey: ['chat'],
     mutationFn: async () => {
       const keys = getUserKey();
-      const res = await generateVoiceMessage.mutateAsync({ message });
-      const newMessages = [...store.messages, ...res];
+      const voiceRes = await generateVoiceMessage.mutateAsync({ message });
+      const newMessages = [...store.messages, ...voiceRes];
       store.setMessages(newMessages);
-      // const res = await chatStream.mutateAsync({
-      //   message,
-      //   privateKeyStoreId: keys.storeId,
-      //   seed: keys.seed,
-      //   address: keys.address,
-      // });
+      const res = await chatStream.mutateAsync({
+        message,
+        privateKeyStoreId: keys.storeId,
+        seed: keys.seed,
+        address: keys.address,
+      });
 
       console.log(res);
     },
