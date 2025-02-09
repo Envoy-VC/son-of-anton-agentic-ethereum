@@ -55,8 +55,10 @@ export const getGoatResponse = async (
     transport: http(),
   });
 
+  const wallet = viem(walletClient);
+
   const tools = await getOnChainTools({
-    wallet: viem(walletClient),
+    wallet,
     plugins: [
       // erc20({ tokens: [] }),
       // zeroEx({ apiKey: env['0X_API_KEY'] }),
@@ -64,13 +66,15 @@ export const getGoatResponse = async (
       // coingecko({ apiKey: env.COINGECKO_API_KEY, isPro: false }),
       // opensea(env.OPENSEA_API_KEY),
       // superfluid(),
-      walletHelpersPlugin(),
+      // walletHelpersPlugin(),
     ],
   });
 
   const toolsAvailable = Object.keys(tools).map((tool) => ({
     name: tool,
   }));
+
+  console.log(toolsAvailable);
 
   const result = await generateText({
     model,

@@ -1,30 +1,40 @@
+import { useEffect } from 'react';
 import { useAvatarStore } from '~/stores';
-import type { MessageWithAudio } from '~/types';
 
 export const useAvatar = () => {
   const store = useAvatarStore();
 
-  const startSequence = async (message: MessageWithAudio): Promise<void> => {
-    return new Promise((resolve) => {
-      const a = new Audio(message.audio);
-      store.setFacialExpression(message.facialExpression);
-      store.setVisemes(message.visemes);
-      store.setAnimation(message.animation);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    if (store.messages[0]) {
+      store.setCurrentMessage(store.messages[0]);
+    } else {
+      store.setCurrentMessage(null);
+    }
+  }, [store.messages]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    const startSequence = () => {
+      if (!store.currentMessage) {
+        return;
+      }
+      const a = new Audio(store.currentMessage.audio);
+      store.setFacialExpression(store.currentMessage.facialExpression);
+      store.setVisemes(store.currentMessage.visemes);
       a.play();
       store.setAudio(a);
-
       a.onended = () => {
         store.onMessagePlayed();
         store.setFacialExpression('default');
         store.setVisemes(null);
-        store.setAnimation('standing-animation');
-        resolve();
       };
-    });
-  };
+    };
 
-  return { store, startSequence };
+    startSequence();
+  }, [store.currentMessage]);
+
+  return { store };
 };
 
 export default useAvatar;

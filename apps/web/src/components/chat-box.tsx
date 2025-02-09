@@ -13,7 +13,7 @@ import { cn } from '~/lib/utils';
 
 export const ChatBox = ({ className, ...props }: ComponentProps<'div'>) => {
   const { getUserKey } = useUser();
-  const { startSequence } = useAvatar();
+  const { store } = useAvatar();
   const [message, setMessage] = useState<string>('');
   const { addMessages } = useChat();
 
@@ -25,9 +25,8 @@ export const ChatBox = ({ className, ...props }: ComponentProps<'div'>) => {
     mutationFn: async () => {
       const keys = getUserKey();
       const voiceRes = await generateVoiceMessage.mutateAsync({ message });
-      for await (const voice of voiceRes) {
-        await startSequence(voice);
-      }
+      const messages = [...store.messages, ...voiceRes];
+      store.setMessages(messages);
       const res = await chatStream.mutateAsync({
         message,
         privateKeyStoreId: keys.storeId,
