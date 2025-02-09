@@ -4,6 +4,22 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
+      "env": [
+        "CDP_API_KEY_NAME",
+        "CDP_API_KEY_PRIVATE_KEY",
+        "MISTRAL_API_KEY",
+        "NILLION_CHAIN_ID",
+        "NILLION_BOOTNODE_URL",
+        "NILLION_PK",
+        "NILLION_SEED",
+        "POLLY_AWS_ACCESS_KEY",
+        "POLLY_AWS_SECRET_KEY",
+        "ZERO_X_API_KEY",
+        "ONE_INCH_API_KEY",
+        "COINGECKO_API_KEY",
+        "OPENSEA_API_KEY",
+        "ALCHEMY_API_KEY"
+      ],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },

@@ -1,11 +1,10 @@
 <p align="center">
-<img src="./assets/logo.svg" alt=""  width="200px"/></p>
 
-## Architecture 🏗️
+# Son of Anton
 
-## How it works 🛠️
+Son of Anton is a AI Agent which is meant to be mother of all agents, and can perform various kinds of web3 interactions. Under the hood it uses Implementation of a Nillion Network for MPC based threshold ECDSA signatures.
 
-## Demo Video 🎥
+This means the private key is never exposed to the user, and the user can interact with the AI Agent without ever having to worry about their private key.
 
 ## Screenshots 📸
 
@@ -48,9 +47,6 @@
   </tr>
 </table>
 
-## 🎥 Demo Video
-
-[![Demo Video](https://img.youtube.com/vi/video_id/0.jpg)](https://www.youtube.com/watch?v=video_id)
 
 ## Get Started 🚀
 
@@ -66,7 +62,7 @@ pnpm install
 
 ```
 
-Then fill in the Environment variables in `apps/wwwebwew/.env.local`
+Then fill in the Environment variables in `apps/www/.env.local`
 
 ```bash
 
