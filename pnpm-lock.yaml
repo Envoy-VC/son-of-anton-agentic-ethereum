@@ -41,6 +41,24 @@ importers:
       '@ai-sdk/mistral':
         specifier: ^1.1.7
         version: 1.1.7(zod@3.24.1)
+      '@anton-stack/0x-plugin':
+        specifier: ^0.1.0
+        version: 0.1.0(typescript@5.7.3)
+      '@anton-stack/1inch-plugin':
+        specifier: ^0.1.0
+        version: 0.1.0(typescript@5.7.3)
+      '@anton-stack/coingecko-plugin':
+        specifier: ^0.1.0
+        version: 0.1.0(typescript@5.7.3)
+      '@anton-stack/nillion-viem-account':
+        specifier: ^0.0.0
+        version: 0.0.0(typescript@5.7.3)(zod@3.24.1)
+      '@anton-stack/opensea-plugin':
+        specifier: ^0.1.0
+        version: 0.1.0(typescript@5.7.3)
+      '@anton-stack/superfluid-plugin':
+        specifier: ^0.1.0
+        version: 0.1.0(typescript@5.7.3)
       '@aws-sdk/client-polly':
         specifier: ^3.744.0
         version: 3.744.0
@@ -306,6 +324,24 @@ packages:
   '@ampproject/remapping@2.3.0':
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
     engines: {node: '>=6.0.0'}
+
+  '@anton-stack/0x-plugin@0.1.0':
+    resolution: {integrity: sha512-f4/JwK+hAM9OURHPBOYQs0AfEO4emP6UdV+xmSzGlz8LU+JnZOFNUqQfsjRc4tPeVR6qaWmOUfyH9M/OGgOvNw==}
+
+  '@anton-stack/1inch-plugin@0.1.0':
+    resolution: {integrity: sha512-7LAwx05wmg5+ebEXAHZDreKwDwcKFxCEFUqy0h6LkefHJJrAFUoTlzn5vxdWmpWvmtgQF6cmuJKRY/DCBkr13Q==}
+
+  '@anton-stack/coingecko-plugin@0.1.0':
+    resolution: {integrity: sha512-yoqjEcVcTfSu4lMRcFFko8ueGUwgcletdeJopaOA4yCVo3awiRGi91XT8xsljK8vhHTkSw5v3DhR5dtcarDIJw==}
+
+  '@anton-stack/nillion-viem-account@0.0.0':
+    resolution: {integrity: sha512-ZaTNCEPpfQ2DbkSGCQiaDnTkfgjg7sEBIXaA2OvRRqLQ+/g9VypZ1Ax1paDPPLUgm3J9mkeW+0OUjvUEAsqfbQ==}
+
+  '@anton-stack/opensea-plugin@0.1.0':
+    resolution: {integrity: sha512-qikDcHfG6+61NuWI9n1PcHCjv1ydts/fxSwHhQ1QuSB1vfXaKWaBkgm/RLCQenAShtEI2wK3FPGlY0YIqWS1xg==}
+
+  '@anton-stack/superfluid-plugin@0.1.0':
+    resolution: {integrity: sha512-AAWxcuBCMMggSEO5g17rpLqKpdmAKWXHmI6OPombq654PslBdGoatL2AaLlMooKIj9+qIhuYH+DHYysMZt4+/A==}
 
   '@aws-crypto/sha256-browser@5.2.0':
     resolution: {integrity: sha512-AXfN/lGotSQwu6HNcEsIASo7kWXZ5HYWvfOmSNKDsEqC4OashTp8alTmaz+F7TC2L083SFv5RdB+qU3Vs1kZqw==}
@@ -5626,6 +5662,69 @@ snapshots:
     dependencies:
       '@jridgewell/gen-mapping': 0.3.8
       '@jridgewell/trace-mapping': 0.3.25
+
+  '@anton-stack/0x-plugin@0.1.0(typescript@5.7.3)':
+    dependencies:
+      '@coinbase/agentkit': 0.1.2(typescript@5.7.3)
+      zod: 3.24.1
+    transitivePeerDependencies:
+      - bufferutil
+      - debug
+      - typescript
+      - utf-8-validate
+
+  '@anton-stack/1inch-plugin@0.1.0(typescript@5.7.3)':
+    dependencies:
+      '@coinbase/agentkit': 0.1.2(typescript@5.7.3)
+      zod: 3.24.1
+    transitivePeerDependencies:
+      - bufferutil
+      - debug
+      - typescript
+      - utf-8-validate
+
+  '@anton-stack/coingecko-plugin@0.1.0(typescript@5.7.3)':
+    dependencies:
+      '@coinbase/agentkit': 0.1.2(typescript@5.7.3)
+      zod: 3.24.1
+    transitivePeerDependencies:
+      - bufferutil
+      - debug
+      - typescript
+      - utf-8-validate
+
+  '@anton-stack/nillion-viem-account@0.0.0(typescript@5.7.3)(zod@3.24.1)':
+    dependencies:
+      '@nillion/client-vms': 0.3.1
+      '@nillion/client-wasm': 0.3.1
+      viem: 2.22.23(typescript@5.7.3)(zod@3.24.1)
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - typescript
+      - utf-8-validate
+      - zod
+
+  '@anton-stack/opensea-plugin@0.1.0(typescript@5.7.3)':
+    dependencies:
+      '@coinbase/agentkit': 0.1.2(typescript@5.7.3)
+      zod: 3.24.1
+    transitivePeerDependencies:
+      - bufferutil
+      - debug
+      - typescript
+      - utf-8-validate
+
+  '@anton-stack/superfluid-plugin@0.1.0(typescript@5.7.3)':
+    dependencies:
+      '@coinbase/agentkit': 0.1.2(typescript@5.7.3)
+      viem: 2.22.23(typescript@5.7.3)(zod@3.24.1)
+      zod: 3.24.1
+    transitivePeerDependencies:
+      - bufferutil
+      - debug
+      - typescript
+      - utf-8-validate
 
   '@aws-crypto/sha256-browser@5.2.0':
     dependencies:

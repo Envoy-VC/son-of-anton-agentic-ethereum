@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
+import { NillionECDSA } from '@anton-stack/nillion-viem-account';
 import { createSignerFromKey } from '@nillion/client-vms';
 import { secp256k1 } from '@noble/curves/secp256k1';
-import { NillionECDSA } from 'nillion-viem-client';
 import { type SignableMessage, toHex } from 'viem';
 
 const Hex = z.string().regex(/^0x[a-fA-F0-9]+$/, 'Invalid hex format');

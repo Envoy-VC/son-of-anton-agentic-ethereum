@@ -16,6 +16,12 @@
   },
   "dependencies": {
     "@ai-sdk/mistral": "^1.1.7",
+    "@anton-stack/0x-plugin": "^0.1.0",
+    "@anton-stack/1inch-plugin": "^0.1.0",
+    "@anton-stack/coingecko-plugin": "^0.1.0",
+    "@anton-stack/nillion-viem-account": "^0.0.0",
+    "@anton-stack/opensea-plugin": "^0.1.0",
+    "@anton-stack/superfluid-plugin": "^0.1.0",
     "@aws-sdk/client-polly": "^3.744.0",
     "@coinbase/agentkit": "^0.1.1",
     "@coinbase/agentkit-langchain": "^0.1.0",

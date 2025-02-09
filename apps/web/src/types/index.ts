@@ -29,7 +29,7 @@ export type AvatarModel = GLTF & {
 };
 
 export const messageSchema = z.object({
-  message: z.string().describe('The message to speak'),
+  text: z.string().describe('The text to speak'),
   facialExpression: z.string().describe('The facial expression to use'),
   animation: z
     .string()
