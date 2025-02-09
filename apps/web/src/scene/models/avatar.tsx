@@ -70,6 +70,7 @@ export const Avatar = (props: GroupProps) => {
     }
   };
 
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: <explanation>
   useFrame(() => {
     if (store.currentMessage && store.audio && store.visemes) {
       const currentAudioTime = store.audio.currentTime;
