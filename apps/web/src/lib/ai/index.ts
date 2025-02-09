@@ -106,8 +106,8 @@ export const initializeAgent = async (props: InitializeAgentProps) => {
   const erc20 = erc20ActionProvider();
   const erc721 = erc721ActionProvider();
   const pyth = pythActionProvider();
-  const zeroX = zeroXActionProvider({ apiKey: env['0X_API_KEY'] });
-  const oneInch = oneInchActionProvider({ apiKey: env['1INCH_API_KEY'] });
+  const zeroX = zeroXActionProvider({ apiKey: env.ZERO_X_API_KEY });
+  const oneInch = oneInchActionProvider({ apiKey: env.ONE_INCH_API_KEY });
   const coinGecko = coinGeckoActionProvider({
     apiKey: env.COINGECKO_API_KEY,
     isPro: false,

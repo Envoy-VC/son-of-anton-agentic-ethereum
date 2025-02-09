@@ -11,8 +11,8 @@ import type { LipSyncData } from '~/types';
 const client = new PollyClient({
   region: 'ap-south-1',
   credentials: {
-    accessKeyId: env.AWS_ACCESS_KEY,
-    secretAccessKey: env.AWS_SECRET_KEY,
+    accessKeyId: env.POLLY_AWS_ACCESS_KEY,
+    secretAccessKey: env.POLLY_AWS_SECRET_KEY,
   },
 });
 
